@@ -10,6 +10,6 @@ public class ShowLostActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.show_lost);
+        setContentView(R.layout.view_lost_alert);
     }
 }

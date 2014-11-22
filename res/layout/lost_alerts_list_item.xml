@@ -20,8 +20,7 @@
         android:layout_toRightOf="@+id/image"
         android:paddingBottom="7dp"
         android:textColor="#CC0033"
-        android:textSize="16dp" 
-        
+        android:textSize="20dp"
         android:text="swefersgfergferg"/>
  
     <TextView

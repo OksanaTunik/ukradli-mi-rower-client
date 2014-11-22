@@ -70,14 +70,14 @@ public final class R {
         public static final int txtText=0x7f090002;
     }
     public static final class layout {
-        public static final int lost =0x7f030000;
-        public static final int home =0x7f030001;
-        public static final int list_item=0x7f030002;
-        public static final int show_lost =0x7f030003;
+        public static final int new_lost_alert =0x7f030000;
+        public static final int lost_alerts_list =0x7f030001;
+        public static final int lost_alerts_list_item =0x7f030002;
+        public static final int view_lost_alert =0x7f030003;
         public static final int login=0x7f030004;
         public static final int main=0x7f030005;
         public static final int new_bicycle=0x7f030006;
-        public static final int progresscircle=0x7f030007;
+        public static final int waiting =0x7f030007;
         public static final int signup=0x7f030008;
     }
     public static final class menu {
