@@ -1,0 +1,88 @@
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#f6f5f7" >
+ 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:padding="10dip" >
+        <!--  View Title Label -->
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="SIGN UP"
+            android:textSize="25dip"
+            android:textStyle="bold" />
+
+        <!--  Email Label -->
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textSize="18dip" />
+        <!--  Email TextField -->
+
+        <EditText
+            android:id="@+id/txtDisplayName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext"
+            android:inputType="text"
+            android:textColorLink="@color/black" />
+         
+        <!--  Password Label -->
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dip"
+            android:text="Email"
+            android:textSize="18dip"
+             />
+     
+        <EditText
+            android:id="@+id/txtEmail"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext"
+            android:inputType="textEmailAddress"
+            android:textColorLink="@color/black" />
+        
+           <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dip"
+            android:text="Password"
+           android:textSize="18dip"
+             />
+  
+        <EditText
+            android:id="@+id/txtPwd"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext"
+            android:inputType="textPassword"
+            android:password="true"
+            android:textColorLink="@color/black" />
+           
+               <Button
+                   android:id="@+id/btnSignup"
+                   android:layout_width="fill_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_marginLeft="4dip"
+                   android:layout_marginRight="10dip"
+                   android:layout_marginTop="20dp"
+                   android:layout_weight="1"
+                   android:background="@drawable/button_signup"
+                   android:textSize="30px"
+                   android:text="SignUp" />
+
+    </LinearLayout>
+ 
+</ScrollView>

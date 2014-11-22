@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="0"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="214dp"
+        android:orientation="vertical"
+        android:padding="10dip" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Bicycle Model"
+            android:textSize="18dip" />
+
+        <EditText
+            android:id="@+id/txtBicycle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext"
+            android:hint="Bicycle Model"
+            android:inputType="text"
+            android:textColorLink="@color/black"
+            android:textSize="18sp" />
+
+        <requestFocus />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dip"
+            android:text="Description"
+            android:textSize="18dip" />
+
+        <EditText
+            android:id="@+id/txtText"
+            android:layout_width="fill_parent"
+            android:layout_height="101dp"
+            android:background="@drawable/edittext_newbicycle"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:textColorLink="@color/black"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_add_photo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:text="Add photo"
+        android:textColor="#000000" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="0" >
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnDone"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_signup"
+        android:text="Done"
+        android:textSize="30px" />
+
+</LinearLayout>

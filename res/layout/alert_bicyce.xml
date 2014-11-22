@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="0"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="114dp"
+        android:orientation="vertical"
+        android:padding="10dip" >
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:id="@+id/mygallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="214dp"
+        android:orientation="vertical"
+        android:padding="10dip" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Bicycle Model"
+            android:textSize="20dip" />
+
+        <EditText
+            android:id="@+id/txtBicycle"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edittext"
+            android:inputType="text"
+            android:textColorLink="@color/black"
+            android:textSize="18sp" />
+
+        <requestFocus />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dip"
+            android:text="Description"
+            android:textSize="20dip" />
+
+        <EditText
+            android:id="@+id/txtText"
+            android:layout_width="fill_parent"
+            android:layout_height="101dp"
+            android:background="@drawable/edittext_newbicycle"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:textColorLink="@color/black"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Add location"
+            android:textSize="20dip" />
+
+        <ImageButton
+            android:id="@+id/btn_map"
+            android:layout_width="50dp"
+            android:layout_height="45dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:src="@drawable/icon_marker_location" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnOk"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_signup"
+        android:text="Ok"
+        android:textSize="30px" />
+
+</LinearLayout>
