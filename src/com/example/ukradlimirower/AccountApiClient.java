@@ -17,16 +17,9 @@ import org.json.JSONObject;
 import android.content.Context;
 
 
-public class AccountApiClient {
-	protected static String apiUrl = "http://ukradli-mi-rower.eu-gb.mybluemix.net/api";
-	protected static String FILENAME = "APIKEY";
-	
-	public static String getUrl(String postfix) {
-		return apiUrl + postfix;
-	}
-	
+public class AccountApiClient extends BaseApiClient {
 	public static String signUp(String email, String password, String displayName) {
-		List<NameValuePair> data = new ArrayList<NameValuePair>(2);
+		List<NameValuePair> data = new ArrayList<NameValuePair>();
 		data.add(new BasicNameValuePair("name", displayName));
 		data.add(new BasicNameValuePair("email", email));
         data.add(new BasicNameValuePair("password", password));
@@ -52,7 +45,7 @@ public class AccountApiClient {
 	}
 	
 	public static String logIn(String email, String password) {
-		List<NameValuePair> data = new ArrayList<NameValuePair>(2);
+		List<NameValuePair> data = new ArrayList<NameValuePair>();
 		data.add(new BasicNameValuePair("email", email));
         data.add(new BasicNameValuePair("password", password));
         
@@ -76,7 +69,7 @@ public class AccountApiClient {
 	}
 	
 	public static boolean checkLogIn(String apiKey) {
-		List<NameValuePair> data = new ArrayList<NameValuePair>(2);
+		List<NameValuePair> data = new ArrayList<NameValuePair>();
 		data.add(new BasicNameValuePair("api_key", apiKey));
         
 		JSONObject res = HttpClientHelper.post(getUrl("/account/restore_session"), data);
@@ -93,12 +86,14 @@ public class AccountApiClient {
 	}
 	
 	public static boolean addBike(String apiKey, String title, String description) {
-		List<NameValuePair> data = new ArrayList<NameValuePair>(2);
+		List<NameValuePair> data = new ArrayList<NameValuePair>();
 		data.add(new BasicNameValuePair("api_key", apiKey));
 		data.add(new BasicNameValuePair("title", title));
 		data.add(new BasicNameValuePair("description", description));
         
-		JSONObject res = HttpClientHelper.post(getUrl("/bikes"), data);
+		String url = getUrl("/bikes");
+		
+		JSONObject res = HttpClientHelper.post(url, data);
 		boolean result = false;
 		
 		try {
