@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="android" name="Android">
+      <configuration>
+        <option name="GEN_FOLDER_RELATIVE_PATH_APT" value="/../../ukradli-mi-rower-client/gen" />
+        <option name="GEN_FOLDER_RELATIVE_PATH_AIDL" value="/../../ukradli-mi-rower-client/gen" />
+        <option name="MANIFEST_FILE_RELATIVE_PATH" value="/../../ukradli-mi-rower-client/AndroidManifest.xml" />
+        <option name="RES_FOLDER_RELATIVE_PATH" value="/../../ukradli-mi-rower-client/res" />
+        <option name="ASSETS_FOLDER_RELATIVE_PATH" value="/../../ukradli-mi-rower-client/assets" />
+        <option name="LIBS_FOLDER_RELATIVE_PATH" value="/../../ukradli-mi-rower-client/libs" />
+        <option name="PROGUARD_LOGS_FOLDER_RELATIVE_PATH" value="/../../ukradli-mi-rower-client/proguard_logs" />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_6" inherit-compiler-output="false">
+    <output url="file://gen/apk" />
+    <output-test url="file:///test/ukradli-mi-rower-client" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/gen" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+    </content>
+    <orderEntry type="jdk" jdkName="Android API 21 Platform" jdkType="Android SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

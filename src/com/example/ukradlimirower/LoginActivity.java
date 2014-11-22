@@ -20,88 +20,88 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class LoginActivity extends BaseActivity implements OnClickListener {
-	EditText txtUserName;
-	EditText txtPassword;
-	Button btnLogin;
-	Button btnCancel;
-	TextView txtSignUp;
-	Button btnSignUp;
+    EditText txtUserName;
+    EditText txtPassword;
+    Button btnLogin;
+    Button btnCancel;
+    TextView txtSignUp;
+    Button btnSignUp;
 
-	/** Called when the activity is first created. */
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.login);
+    /** Called when the activity is first created. */
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.login);
 
-		txtUserName = (EditText) findViewById(R.id.txtEmail);
-		txtPassword = (EditText) findViewById(R.id.txtPwd);
+        txtUserName = (EditText) findViewById(R.id.txtEmail);
+        txtPassword = (EditText) findViewById(R.id.txtPwd);
 
-		btnLogin = (Button) this.findViewById(R.id.btnLogin);
-		btnSignUp = (Button) this.findViewById(R.id.btnSignUp);
+        btnLogin = (Button) this.findViewById(R.id.btnLogin);
+        btnSignUp = (Button) this.findViewById(R.id.btnSignUp);
 
-		btnLogin.setOnClickListener(new OnClickListener() {
+        btnLogin.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
 
-				EditText txtUserName = (EditText) findViewById(R.id.txtEmail);
-				EditText txtPassword = (EditText) findViewById(R.id.txtPwd);
-				if (txtUserName.getText().length() == 0) {
-					txtUserName.setError("please enter the email");
+                EditText txtUserName = (EditText) findViewById(R.id.txtEmail);
+                EditText txtPassword = (EditText) findViewById(R.id.txtPwd);
+                if (txtUserName.getText().length() == 0) {
+                    txtUserName.setError("please enter the email");
 
-				} else if (!isEmailValid(txtUserName.getText())) {
-					txtUserName.setError("email is not Valid");
-				}
-				if (txtPassword.getText().length() == 0) {
-					txtPassword.setError("please enter the password");
+                } else if (!isEmailValid(txtUserName.getText())) {
+                    txtUserName.setError("email is not Valid");
+                }
+                if (txtPassword.getText().length() == 0) {
+                    txtPassword.setError("please enter the password");
 
-				}
-				if (txtUserName.getError() == null
-						&& txtPassword.getError() == null) {
+                }
+                if (txtUserName.getError() == null
+                        && txtPassword.getError() == null) {
 
-					String username = txtUserName.getText().toString();
-					String password = txtPassword.getText().toString();
-					
-					new LoginTask().execute(username, password);
-				}
+                    String username = txtUserName.getText().toString();
+                    String password = txtPassword.getText().toString();
+                    
+                    new LoginTask().execute(username, password);
+                }
 
-			}
-		});
+            }
+        });
 
-		btnSignUp.setOnClickListener(new OnClickListener() {
+        btnSignUp.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View arg0) {
-				showSignUp();
-			}
-		});
-	}
+            @Override
+            public void onClick(View arg0) {
+                showSignUp();
+            }
+        });
+    }
 
-	@Override
-	public void onClick(View v) {
-		// TODO Auto-generated method stub
+    @Override
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
 
-	}
+    }
 
-	boolean isEmailValid(CharSequence email) {
-		return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
-	}
+    boolean isEmailValid(CharSequence email) {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
 
-	public class LoginTask extends AsyncTask<String, Void, String> {
-		@Override
-		protected String doInBackground(String... params) {
-			return AccountApiClient.logIn(params[0], params[1]);
-		}
-		
-		@Override
-	    protected void onPostExecute(String result) {
-			if (result != null) {
-				StoreApiKey(result);
-				showHome();
-			} else {
-				Toast.makeText(getApplicationContext(), "Wrong username/password", Toast.LENGTH_SHORT).show(); 
-				showLogin();
-			}
-	    }
-	}
+    public class LoginTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected String doInBackground(String... params) {
+            return AccountApiClient.logIn(params[0], params[1]);
+        }
+        
+        @Override
+        protected void onPostExecute(String result) {
+            if (result != null) {
+                StoreApiKey(result);
+                showHome();
+            } else {
+                Toast.makeText(getApplicationContext(), "Wrong username/password", Toast.LENGTH_SHORT).show(); 
+                showLogin();
+            }
+        }
+    }
 }
