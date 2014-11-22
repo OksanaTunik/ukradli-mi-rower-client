@@ -70,8 +70,8 @@ public final class R {
         public static final int txtText=0x7f090002;
     }
     public static final class layout {
-        public static final int alert_bicyce=0x7f030000;
-        public static final int list=0x7f030001;
+        public static final int lost =0x7f030000;
+        public static final int home =0x7f030001;
         public static final int list_item=0x7f030002;
         public static final int show_lost =0x7f030003;
         public static final int login=0x7f030004;
