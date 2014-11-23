@@ -128,6 +128,12 @@ public class AlertsApiClient extends BaseApiClient {
                         alert.getDouble("lon")
                 );
 
+                JSONArray images = alert.getJSONArray("images");
+
+                for (int t = 0; t < images.length(); t++) {
+                    resultListItem.images.add((String) images.get(t));
+                }
+
                 result.add(resultListItem);
             }
         } catch (Exception e) {
@@ -155,18 +161,35 @@ public class AlertsApiClient extends BaseApiClient {
                     alert.getDouble("lon")
             );
 
+            {
+                JSONArray images = alert.getJSONArray("images");
+
+                for (int i = 0; i < images.length(); i++) {
+                    result.images.add((String) images.get(i));
+                }
+            }
+
             JSONArray foundAlerts = alert.getJSONArray("found_alerts");
 
             for (int i = 0; i < foundAlerts.length(); i++) {
                 JSONObject childAlert = (JSONObject) foundAlerts.get(i);
-                result.foundAlerts.add(new FoundAlert(
+
+                FoundAlert foundAlert = new FoundAlert(
                         childAlert.getInt("id"),
                         childAlert.getString("title"),
                         childAlert.getString("description"),
                         childAlert.getJSONObject("author").getString("name"),
                         childAlert.getDouble("lat"),
                         childAlert.getDouble("lon")
-                ));
+                );
+
+                JSONArray images = childAlert.getJSONArray("images");
+
+                for (int t = 0; t < images.length(); t++) {
+                    foundAlert.images.add((String) images.get(t));
+                }
+
+                result.foundAlerts.add(foundAlert);
             }
         } catch (Exception e) {
             e.printStackTrace();

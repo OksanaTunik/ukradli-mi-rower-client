@@ -55,9 +55,13 @@ public class ShowLostActivity extends BaseActivity {
 
             TextView tvTitle = (TextView) findViewById(R.id.tvTitle);
             TextView tvDescr = (TextView) findViewById(R.id.tvDescription);
+            ImageView image = (ImageView) findViewById(R.id.image);
 
             tvTitle.setText(result.getTitle());
             tvDescr.setText(result.getDescription());
+
+            if (result.images.size() > 0)
+                image.setImageBitmap(getBitmapFromUrl(result.images.get(0)));
 
             /*lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override

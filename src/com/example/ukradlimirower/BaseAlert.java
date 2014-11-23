@@ -1,5 +1,8 @@
 package com.example.ukradlimirower;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by shybovycha on 23.11.14.
  */
@@ -10,6 +13,7 @@ public class BaseAlert {
     protected double lat;
     protected double lon;
     protected int id;
+    public List<String> images;
 
     public BaseAlert(int id, String title, String description, String author, double lat, double lon) {
         this.id = id;
@@ -18,6 +22,7 @@ public class BaseAlert {
         this.author = author;
         this.lat = lat;
         this.lon = lon;
+        this.images = new ArrayList<String>();
     }
 
     public int getId() {

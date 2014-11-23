@@ -85,9 +85,13 @@ public class LostAlertsListActivity extends BaseActivity {
 
             TextView title = (TextView) listItem.findViewById(R.id.title);
             TextView description = (TextView) listItem.findViewById(R.id.description);
+            ImageView image = (ImageView) listItem.findViewById(R.id.image);
 
             title.setText(alert.getTitle());
             description.setText(alert.getDescription());
+
+            if (alert.images.size() > 0)
+                image.setImageBitmap(getBitmapFromUrl(alert.images.get(0)));
 
             listItem.setTag(String.format("%d", alert.getId()));
 
