@@ -71,7 +71,7 @@ public class LostAlertsListActivity extends BaseActivity {
             View listItem = convertView;
 
             if (listItem == null) {
-                listItem = getLayoutInflater().inflate(R.layout.lost_alerts_list_item, null);
+                listItem = getLayoutInflater().inflate(R.layout.lost_alerts_list_item, parent, false);
             }
 
             LostAlert alert = getItem(position);

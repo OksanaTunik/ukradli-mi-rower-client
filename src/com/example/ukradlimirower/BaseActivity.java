@@ -15,7 +15,7 @@ import android.location.LocationManager;
 
 public abstract class BaseActivity extends Activity {
     public void showNewLostAlert() {
-        Intent intent = getIntent(CreateLostAlertActivity.class);
+        Intent intent = getIntent(CreateLostAlertActivity.class, true);
         startActivity(intent);
     }
 
@@ -40,13 +40,13 @@ public abstract class BaseActivity extends Activity {
     }
 
     public void showLostAlert(String alertId) {
-        Intent intent = getIntent(ShowLostActivity.class);
+        Intent intent = getIntent(ShowLostActivity.class, true);
         intent.putExtra("alertId", alertId);
         startActivity(intent);
     }
 
     public void showCreateFoundAlert(String alertId) {
-        Intent intent = getIntent(CreateFoundAlertActivity.class);
+        Intent intent = getIntent(CreateFoundAlertActivity.class, true);
         intent.putExtra("alertId", alertId);
         startActivity(intent);
     }

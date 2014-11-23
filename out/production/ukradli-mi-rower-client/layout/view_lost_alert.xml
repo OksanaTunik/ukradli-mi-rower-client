@@ -51,17 +51,18 @@
         />
     </LinearLayout>
 
-    <VerticalScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.5"
-            >
+    <!--<VerticalScrollView-->
+            <!--android:layout_width="fill_parent"-->
+            <!--android:layout_height="0dp"-->
+            <!--android:layout_weight="0.5"-->
+            <!-->-->
         <ListView
                 android:id="@+id/found_alerts"
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.5"
         />
-    </VerticalScrollView>
+    <!--</VerticalScrollView>-->
 
     <LinearLayout
             android:layout_width="fill_parent"
@@ -77,6 +78,7 @@
                 android:text="found it!"
                 android:background="#f30000"
                 android:textAllCaps="true"
+                android:textSize="35dp"
         />
     </LinearLayout>
 </LinearLayout>
