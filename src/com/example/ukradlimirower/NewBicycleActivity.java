@@ -35,6 +35,8 @@ public class NewBicycleActivity  extends BaseActivity {
                     String title = txtBicycle.getText().toString();
                     String description = txtText.getText().toString();
 
+                    setContentView(R.layout.waiting);
+
                     new CreateBikeTask().execute(title, description);
                 }
             }
@@ -44,7 +46,7 @@ public class NewBicycleActivity  extends BaseActivity {
     public class CreateBikeTask extends AsyncTask<String, Void, Boolean> {
         @Override
         protected Boolean doInBackground(String... params) {
-            String apiKey = ReadApiKey();
+            String apiKey = readApiKey();
             return AccountApiClient.addBike(apiKey, params[0], params[1]);
         }
 

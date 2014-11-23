@@ -30,7 +30,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Bicycle Model"
+            android:text="Title (for ex. bike model):"
             android:textSize="20dp" />
 
         <EditText
@@ -48,11 +48,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dip"
-            android:text="Description"
+            android:text="Description:"
             android:textSize="20dp" />
 
         <EditText
-            android:id="@+id/txtText"
+            android:id="@+id/txtDescription"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="0.5"

@@ -13,7 +13,7 @@ import java.util.List;
  * Created by shybovycha on 23.11.14.
  */
 public class AlertsApiClient extends BaseApiClient {
-    public static boolean createLostAlert(String apiKey, String title, String description, Float lat, Float lon) {
+    public static boolean createLostAlert(String apiKey, String title, String description, Double lat, Double lon) {
         String lat_s = lat.toString();
         String lon_s = lon.toString();
 
@@ -38,7 +38,7 @@ public class AlertsApiClient extends BaseApiClient {
         return result;
     }
 
-    public static boolean createFoundAlert(String apiKey, String lostAlertId, String title, String description, Float lat, Float lon) {
+    public static boolean createFoundAlert(String apiKey, String lostAlertId, String title, String description, Double lat, Double lon) {
         String lat_s = lat.toString();
         String lon_s = lon.toString();
 
@@ -50,7 +50,7 @@ public class AlertsApiClient extends BaseApiClient {
         data.add(new BasicNameValuePair("lat", lat_s));
         data.add(new BasicNameValuePair("lon", lon_s));
 
-        String url = getUrl("/alerts/lost");
+        String url = getUrl("/alerts/found");
 
         JSONObject res = HttpClientHelper.post(url, data);
         boolean result = false;
@@ -64,8 +64,38 @@ public class AlertsApiClient extends BaseApiClient {
         return result;
     }
 
+    public static List<LostAlert> getAllLostAlerts() {
+        String url = getUrl(String.format("/alerts/lost"));
+
+        JSONObject res = HttpClientHelper.get(url);
+        List<LostAlert> result = new ArrayList<LostAlert>();
+
+        try {
+            JSONArray lostAlerts = res.getJSONArray("alerts");
+
+            for (int i = 0; i < lostAlerts.length(); i++) {
+                JSONObject alert = (JSONObject) lostAlerts.get(i);
+
+                LostAlert resultListItem = new LostAlert(
+                        alert.getInt("id"),
+                        alert.getString("title"),
+                        alert.getString("description"),
+                        alert.getString("author"),
+                        alert.getDouble("lat"),
+                        alert.getDouble("lon")
+                );
+
+                result.add(resultListItem);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
     public static LostAlert getLostAlert(String alertId) {
-        String url = getUrl(String.format("/alerts/lost?id={0}", alertId));
+        String url = getUrl(String.format("/alerts/lost/%s", alertId));
 
         JSONObject res = HttpClientHelper.get(url);
         LostAlert result = null;

@@ -7,8 +7,10 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="21" />
-    
-    <uses-permission android:name="android.permission.INTERNET" ></uses-permission>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -22,12 +24,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
+
         <activity android:name=".SignUpActivity" android:label="@string/app_name" />
         <activity android:name=".NewBicycleActivity" android:label="@string/app_name" />
         <activity android:name=".LostAlertsListActivity" android:label="@string/app_name" />
         <activity android:name=".ShowLostActivity"/>
-        <activity android:name=".LostAlertActivity"/>
+        <activity android:name=".CreateLostAlertActivity"/>
+        <activity android:name=".CreateFoundAlertActivity"/>
     </application>
 
 </manifest>

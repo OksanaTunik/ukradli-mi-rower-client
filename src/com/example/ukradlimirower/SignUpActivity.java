@@ -53,6 +53,8 @@ public class SignUpActivity extends BaseActivity implements OnClickListener {
             String email = txtEmail.getText().toString();
             String password = txtPassword.getText().toString();
 
+            setContentView(R.layout.waiting);
+
             new SignupTask().execute(email, password, name);
         }
     }

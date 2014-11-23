@@ -27,6 +27,7 @@ public class HttpClientHelper {
         JSONObject jObject = null;
 
         try {
+            httppost.setEntity(new UrlEncodedFormEntity(data));
             HttpResponse response = httpclient.execute(httppost);
             BufferedReader reader = new BufferedReader( new InputStreamReader(response.getEntity().getContent()));
             StringBuilder body = new StringBuilder();

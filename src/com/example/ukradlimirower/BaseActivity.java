@@ -4,15 +4,19 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
 
 public abstract class BaseActivity extends Activity {
     public void showNewLostAlert() {
-        Intent intent = getIntent(LostAlertActivity.class);
+        Intent intent = getIntent(CreateLostAlertActivity.class);
+        startActivity(intent);
     }
 
     public void showLogin() {
@@ -39,6 +43,59 @@ public abstract class BaseActivity extends Activity {
         Intent intent = getIntent(ShowLostActivity.class);
         intent.putExtra("alertId", alertId);
         startActivity(intent);
+    }
+
+    public void showCreateFoundAlert(String alertId) {
+        Intent intent = getIntent(CreateFoundAlertActivity.class);
+        intent.putExtra("alertId", alertId);
+        startActivity(intent);
+    }
+
+    public double getLat() {
+        if (getLocation() == null) {
+            return 0.0;
+        } else {
+            return getLocation().getLatitude();
+        }
+    }
+
+    public double getLon() {
+        if (getLocation() == null) {
+            return 0.0;
+        } else {
+            return getLocation().getLongitude();
+        }
+    }
+
+    /*protected Location getLocation() {
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+        return location;
+    }*/
+
+    private Location getLocation() {
+        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = lm.getProviders(true);
+        Location bestLocation = null;
+        for (String provider : providers) {
+            Location l = lm.getLastKnownLocation(provider);
+
+            if (l == null) {
+                continue;
+            }
+
+            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
+                //ALog.d("found best last known location: %s", l);
+                bestLocation = l;
+            }
+        }
+
+        if (bestLocation == null) {
+            return null;
+        }
+
+        return bestLocation;
     }
 
     protected Intent getIntent(Class goTo) {
@@ -74,7 +131,7 @@ public abstract class BaseActivity extends Activity {
 
     }
 
-    protected String ReadApiKey() {
+    protected String readApiKey() {
         String FILENAME = "APIKEY";
         String result = null;
 

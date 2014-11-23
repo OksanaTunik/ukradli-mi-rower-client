@@ -40,12 +40,13 @@ public class LoginActivity extends BaseActivity {
 
                 if (txtPassword.getText().length() == 0) {
                     txtPassword.setError("please enter the password");
-
                 }
 
                 if (txtUserName.getError() == null && txtPassword.getError() == null) {
                     String username = txtUserName.getText().toString();
                     String password = txtPassword.getText().toString();
+
+                    setContentView(R.layout.waiting);
 
                     new LoginTask().execute(username, password);
                 }

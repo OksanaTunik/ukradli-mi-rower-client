@@ -12,7 +12,7 @@
         android:contentDescription="@drawable/home"
         android:paddingLeft="10dp"
         android:paddingRight="20dp" />
- 
+
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
@@ -21,10 +21,10 @@
         android:paddingBottom="7dp"
         android:textColor="#CC0033"
         android:textSize="20dp"
-        android:text="swefersgfergferg"/>
- 
+        android:text="title"/>
+
     <TextView
-        android:id="@+id/desc"
+        android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title"
@@ -32,5 +32,5 @@
         android:paddingLeft="10dp"
         android:textColor="#000"
         android:textSize="14dp"
-        android:text="swefersgfergferg" />
+        android:text="description" />
 </RelativeLayout>
