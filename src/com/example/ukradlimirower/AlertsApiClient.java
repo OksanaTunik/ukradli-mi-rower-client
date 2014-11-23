@@ -1,11 +1,23 @@
 package com.example.ukradlimirower;
 
+import android.graphics.Bitmap;
+import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,25 +25,40 @@ import java.util.List;
  * Created by shybovycha on 23.11.14.
  */
 public class AlertsApiClient extends BaseApiClient {
-    public static boolean createLostAlert(String apiKey, String title, String description, Double lat, Double lon) {
+    public static boolean createLostAlert(String apiKey, String title, String description, Double lat, Double lon, List<File> images) {
         String lat_s = lat.toString();
         String lon_s = lon.toString();
-
-        List<NameValuePair> data = new ArrayList<NameValuePair>();
-        data.add(new BasicNameValuePair("api_key", apiKey));
-        data.add(new BasicNameValuePair("title", title));
-        data.add(new BasicNameValuePair("description", description));
-        data.add(new BasicNameValuePair("lat", lat_s));
-        data.add(new BasicNameValuePair("lon", lon_s));
-
         String url = getUrl("/alerts/lost");
-
-        JSONObject res = HttpClientHelper.post(url, data);
         boolean result = false;
+        String boundary = "-------------" + System.currentTimeMillis();
 
         try {
+            MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+
+            for (File image : images) {
+                /*ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+                byte[] data = bos.toByteArray();
+                ByteArrayBody bab = new ByteArrayBody(data, "pic.jpeg");*/
+
+                entityBuilder.addPart("images[]", new FileBody(image, "image/jpeg"));
+            }
+
+            entityBuilder.setBoundary(boundary);
+            entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+            entityBuilder.addTextBody("api_key", apiKey);
+            entityBuilder.addTextBody("title", title);
+            entityBuilder.addTextBody("description", description);
+            entityBuilder.addTextBody("lat", lat_s);
+            entityBuilder.addTextBody("lon", lon_s);
+
+            HttpEntity entity = entityBuilder.build();
+
+            JSONObject res = HttpClientHelper.post(url, entity, boundary);
+
             result = res.getBoolean("success");
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -57,7 +84,7 @@ public class AlertsApiClient extends BaseApiClient {
 
         try {
             result = res.getBoolean("success");
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -87,7 +114,7 @@ public class AlertsApiClient extends BaseApiClient {
 
                 result.add(resultListItem);
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -125,7 +152,7 @@ public class AlertsApiClient extends BaseApiClient {
                         childAlert.getDouble("lon")
                 ));
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

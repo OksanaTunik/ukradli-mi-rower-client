@@ -36,7 +36,7 @@ public class AccountApiClient extends BaseApiClient {
             } else {
                 result = null;
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -59,7 +59,7 @@ public class AccountApiClient extends BaseApiClient {
             } else {
                 result = null;
             }
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -70,12 +70,12 @@ public class AccountApiClient extends BaseApiClient {
         List<NameValuePair> data = new ArrayList<NameValuePair>();
         data.add(new BasicNameValuePair("api_key", apiKey));
 
-        JSONObject res = HttpClientHelper.post(getUrl("/account/restore_session"), data);
+        JSONObject res = HttpClientHelper.post(getUrl("/users/restore_session"), data);
         boolean result = false;
 
         try {
             result = res.getBoolean("success");
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -95,7 +95,7 @@ public class AccountApiClient extends BaseApiClient {
 
         try {
             result = res.getBoolean("success");
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

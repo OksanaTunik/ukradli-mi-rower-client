@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -21,6 +22,36 @@ import org.json.JSONObject;
 import android.util.JsonReader;
 
 public class HttpClientHelper {
+    public static JSONObject post(String url, HttpEntity entity, String boundary) {
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost(url);
+
+        httppost.setHeader("Content-type", "multipart/form-data, boundary=" + boundary);
+        httppost.setEntity(entity);
+
+        JSONObject jObject = null;
+
+        try {
+            HttpResponse response = httpclient.execute(httppost);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            StringBuilder body = new StringBuilder();
+            String l = reader.readLine();
+
+            while (l != null) {
+                body.append(l);
+                l = reader.readLine();
+            }
+
+            jObject = new JSONObject(body.toString());
+        } catch (ClientProtocolException e) {
+        } catch (IOException e) {
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return jObject;
+    }
+
     public static JSONObject post(String url, List<NameValuePair> data) {
         HttpClient httpclient = new DefaultHttpClient();
         HttpPost httppost = new HttpPost(url);
@@ -29,7 +60,7 @@ public class HttpClientHelper {
         try {
             httppost.setEntity(new UrlEncodedFormEntity(data));
             HttpResponse response = httpclient.execute(httppost);
-            BufferedReader reader = new BufferedReader( new InputStreamReader(response.getEntity().getContent()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             StringBuilder body = new StringBuilder();
             String l = reader.readLine();
 
@@ -56,7 +87,7 @@ public class HttpClientHelper {
 
         try {
             HttpResponse response = httpclient.execute(httpget);
-            BufferedReader reader = new BufferedReader( new InputStreamReader(response.getEntity().getContent()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
             StringBuilder body = new StringBuilder();
             String l = reader.readLine();
 

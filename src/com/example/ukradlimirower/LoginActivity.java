@@ -17,6 +17,12 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.waiting);
+
+        new RestoreSessionTask().execute(readApiKey());
+    }
+
+    protected void showAsUsual() {
         setContentView(R.layout.login);
 
         txtUserName = (EditText) findViewById(R.id.txtEmail);
@@ -79,6 +85,22 @@ public class LoginActivity extends BaseActivity {
             } else {
                 Toast.makeText(getApplicationContext(), "Wrong username/password", Toast.LENGTH_SHORT).show();
                 showLogin();
+            }
+        }
+    }
+
+    public class RestoreSessionTask extends AsyncTask<String, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(String... params) {
+            return AccountApiClient.checkLogIn(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            if (result) {
+                showLostAlertsList();
+            } else {
+                showAsUsual();
             }
         }
     }

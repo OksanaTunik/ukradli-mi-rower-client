@@ -1,19 +1,74 @@
 package com.example.ukradlimirower;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.Parcelable;
+import android.provider.MediaStore;
 
 public abstract class BaseActivity extends Activity {
+    protected Uri outputFileUri;
+
+    protected int getIntentId() {
+        return 1;
+    }
+
+    protected void openImageIntent() {
+        try {
+            // Determine Uri of camera image to save.
+            final File root = new File(Environment.getExternalStorageDirectory() + File.separator + "ukradli-mi-rower-data" + File.separator);
+            root.mkdirs();
+            //final String fname = "image.jpg";
+            final File sdImageMainDirectory = File.createTempFile("camimg", "jpg", root);
+            outputFileUri = Uri.fromFile(sdImageMainDirectory);
+
+            // Camera.
+            final List<Intent> cameraIntents = new ArrayList<Intent>();
+            final Intent captureIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+            final PackageManager packageManager = getPackageManager();
+            final List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
+            for (ResolveInfo res : listCam) {
+                final String packageName = res.activityInfo.packageName;
+                final Intent intent = new Intent(captureIntent);
+                intent.setComponent(new ComponentName(res.activityInfo.packageName, res.activityInfo.name));
+                intent.setPackage(packageName);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+                cameraIntents.add(intent);
+            }
+
+            // Filesystem.
+            final Intent galleryIntent = new Intent();
+            galleryIntent.setType("image/*");
+            galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
+
+            // Chooser of filesystem options.
+            final Intent chooserIntent = Intent.createChooser(galleryIntent, "Select Source");
+
+            // Add the camera options.
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, cameraIntents.toArray(new Parcelable[]{}));
+
+            startActivityForResult(chooserIntent, getIntentId());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void showNewLostAlert() {
         Intent intent = getIntent(CreateLostAlertActivity.class, true);
         startActivity(intent);
@@ -98,6 +153,20 @@ public abstract class BaseActivity extends Activity {
         return bestLocation;
     }
 
+    public Bitmap getBitmapFromUrl(String url) {
+        Bitmap res = null;
+        try {
+            URL ulrn = new URL(url);
+            HttpURLConnection con = (HttpURLConnection)ulrn.openConnection();
+            InputStream is = con.getInputStream();
+            res = BitmapFactory.decodeStream(is);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return res;
+    }
+
     protected Intent getIntent(Class goTo) {
         return getIntent(goTo, false);
     }
@@ -112,15 +181,20 @@ public abstract class BaseActivity extends Activity {
         return intent;
     }
 
+    protected File getApiKeyFile() {
+        File root = new File(Environment.getExternalStorageDirectory() + File.separator + "ukradli-mi-rower-data" + File.separator);
+        root.mkdirs();
+        String fname = "APIKEY";
+
+        return new File(root, fname);
+    }
+
     protected void storeApiKey(String apiKey) {
-        String FILENAME = "APIKEY";
-
-        // File f = new File(FILENAME);
-
+        File file = getApiKeyFile();
         FileOutputStream fos;
 
         try {
-            fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            fos = new FileOutputStream(file);
             fos.write(apiKey.getBytes());
             fos.close();
         } catch (FileNotFoundException e) {
@@ -128,19 +202,14 @@ public abstract class BaseActivity extends Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     protected String readApiKey() {
-        String FILENAME = "APIKEY";
         String result = null;
-
-        // File f = new File(FILENAME);
-
-        FileInputStream fis;
+        File file = getApiKeyFile();
 
         try {
-            fis = openFileInput(FILENAME);
+            FileInputStream fis = new FileInputStream(file);
             Scanner reader = new Scanner(fis);
             result = reader.next();
             fis.close();
