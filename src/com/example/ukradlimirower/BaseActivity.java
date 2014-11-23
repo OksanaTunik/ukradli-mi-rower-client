@@ -155,8 +155,9 @@ public abstract class BaseActivity extends Activity {
 
     public Bitmap getBitmapFromUrl(String url) {
         Bitmap res = null;
+
         try {
-            URL ulrn = new URL(url);
+            URL ulrn = new URL(BaseApiClient.publicUrl + url);
             HttpURLConnection con = (HttpURLConnection)ulrn.openConnection();
             InputStream is = con.getInputStream();
             res = BitmapFactory.decodeStream(is);

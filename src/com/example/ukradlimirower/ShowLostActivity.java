@@ -55,13 +55,19 @@ public class ShowLostActivity extends BaseActivity {
 
             TextView tvTitle = (TextView) findViewById(R.id.tvTitle);
             TextView tvDescr = (TextView) findViewById(R.id.tvDescription);
-            ImageView image = (ImageView) findViewById(R.id.image);
+            LinearLayout imageList = (LinearLayout) findViewById(R.id.images);
+
+            for (int i = 0; i < result.images.size(); i++) {
+                ImageView image = new ImageView(ShowLostActivity.this);
+                image.setImageBitmap(getBitmapFromUrl(result.images.get(i)));
+                image.setAdjustViewBounds(true);
+                image.setLayoutParams(new AbsListView.LayoutParams(200, 200));
+
+                imageList.addView(image);
+            }
 
             tvTitle.setText(result.getTitle());
             tvDescr.setText(result.getDescription());
-
-            if (result.images.size() > 0)
-                image.setImageBitmap(getBitmapFromUrl(result.images.get(0)));
 
             /*lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
