@@ -28,13 +28,13 @@ import java.util.List;
  * Created by shybovycha on 22.11.14.
  */
 public class CreateLostAlertActivity extends BaseActivity {
-    protected List<File> imagesToUpload;
+    protected List<Bitmap> imagesToUpload;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        imagesToUpload = new ArrayList<File>();
+        imagesToUpload = new ArrayList<Bitmap>();
 
         setContentView(R.layout.new_lost_alert);
 
@@ -102,11 +102,9 @@ public class CreateLostAlertActivity extends BaseActivity {
         }
 
         Bitmap bmp = null;
-        File fbmp = null;
 
         try {
             bmp = BitmapFactory.decodeStream(new java.net.URL(selectedImageUri.toString()).openStream());
-            fbmp = new File(new URI(selectedImageUri.toString()));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -118,7 +116,7 @@ public class CreateLostAlertActivity extends BaseActivity {
         imageView.setImageBitmap(bmp);
         imageList.addView(imageView, 1);
 
-        imagesToUpload.add(fbmp);
+        imagesToUpload.add(bmp);
     }
 
     public class CreateLostAlertTask extends AsyncTask<Void, Void, Boolean> {

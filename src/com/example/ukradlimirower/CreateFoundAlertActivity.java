@@ -5,24 +5,33 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by shybovycha on 23.11.14.
  */
 public class CreateFoundAlertActivity extends BaseActivity {
-    protected static int INTENT_ID = 2;
+    protected List<Bitmap> imagesToUpload;
+
+    protected int getIntentId() {
+        return 2;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_found_alert);
+
+        imagesToUpload = new ArrayList<Bitmap>();
 
         Button btnDone = (Button) findViewById(R.id.btnDone);
         Button btnAddImage = (Button) findViewById(R.id.btnAddImage);
@@ -30,19 +39,17 @@ public class CreateFoundAlertActivity extends BaseActivity {
         btnAddImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, INTENT_ID);
+                openImageIntent();
             }
         });
 
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText txtTitle = (EditText) findViewById(R.id.txtTitle);
+                // EditText txtTitle = (EditText) findViewById(R.id.txtTitle);
                 EditText txtDescription = (EditText) findViewById(R.id.txtDescription);
 
-                String title = txtTitle.getText().toString();
+                String title = "Found"; // txtTitle.getText().toString();
                 String description = txtDescription.getText().toString();
 
                 double lat = getLat();
@@ -53,36 +60,56 @@ public class CreateFoundAlertActivity extends BaseActivity {
 
                 setContentView(R.layout.waiting);
 
-                new CreateFoundAlertTask(readApiKey(), alertId, title, description, lat, lon);
+                new CreateFoundAlertTask(readApiKey(), alertId, title, description, lat, lon).execute();
             }
         });
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultcode, Intent intent)
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        super.onActivityResult(requestCode, resultcode, intent);
+        if (resultCode != RESULT_OK || requestCode != getIntentId()) {
+            return;
+        }
 
-        if (requestCode == INTENT_ID) {
-            if (intent != null) {
-                Log.d("IMAGE_PICKER", "idButSelPic Photopicker: " + intent.getDataString());
-                Cursor cursor = getContentResolver().query(intent.getData(), null, null, null, null);
-                cursor.moveToFirst();  //if not doing this, 01-22 19:17:04.564: ERROR/AndroidRuntime(26264): Caused by: android.database.CursorIndexOutOfBoundsException: Index -1 requested, with a size of 1
+        final boolean isCamera;
 
-                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-                String fileSrc = cursor.getString(idx);
-                Log.d("IMAGE_PICKER", "Picture:" + fileSrc);
-                //m_Tv.setText("Image selected:"+fileSrc);
+        if (data == null) {
+            isCamera = true;
+        } else {
+            final String action = data.getAction();
 
-                Bitmap bitmapPreview = BitmapFactory.decodeFile(fileSrc); //load preview image
-                //BitmapDrawable bmpDrawable = new BitmapDrawable(bitmapPreview);
-                //m_Image.setBackgroundDrawable(bmpDrawable);
-            }
-            else {
-                Log.d("IMAGE_PICKER", "idButSelPic Photopicker canceled");
-                //m_Tv.setText("Image selection canceled!");
+            if (action == null) {
+                isCamera = false;
+            } else {
+                isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             }
         }
+
+        Uri selectedImageUri;
+
+        if (isCamera) {
+            selectedImageUri = outputFileUri;
+        } else {
+            selectedImageUri = (data == null) ? null : data.getData();
+        }
+
+        Bitmap bmp = null;
+
+        try {
+            bmp = BitmapFactory.decodeStream(new java.net.URL(selectedImageUri.toString()).openStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ImageView imageView = new ImageView(this);
+        imageView.setAdjustViewBounds(true);
+        imageView.setLayoutParams(new AbsListView.LayoutParams(200, 200));
+        LinearLayout imageList = (LinearLayout) findViewById(R.id.images);
+        imageView.setImageBitmap(bmp);
+        imageList.addView(imageView, 1);
+
+        imagesToUpload.add(bmp);
     }
 
     public class CreateFoundAlertTask extends AsyncTask<Void, Void, Boolean> {
@@ -106,7 +133,7 @@ public class CreateFoundAlertActivity extends BaseActivity {
 
         @Override
         protected Boolean doInBackground(Void... voids) {
-            return AlertsApiClient.createFoundAlert(apiKey, alertId, title, description, lat, lon);
+            return AlertsApiClient.createFoundAlert(apiKey, alertId, title, description, lat, lon, imagesToUpload);
         }
 
         @Override

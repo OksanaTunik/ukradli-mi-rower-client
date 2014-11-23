@@ -5,23 +5,32 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NewBicycleActivity  extends BaseActivity {
-    protected static int INTENT_ID = 1;
+    protected List<Bitmap> imagesToUpload;
+
+    @Override
+    protected int getIntentId() {
+        return 3;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_bicycle);
+
+        imagesToUpload = new ArrayList<Bitmap>();
 
         Button btnAddImg = (Button) findViewById(R.id.btnAddImage);
         Button btnDone = (Button) findViewById(R.id.btnDone);
@@ -29,9 +38,7 @@ public class NewBicycleActivity  extends BaseActivity {
         btnAddImg.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                photoPickerIntent.setType("image/*");
-                startActivityForResult(photoPickerIntent, INTENT_ID);
+                openImageIntent();
             }
         });
 
@@ -64,37 +71,57 @@ public class NewBicycleActivity  extends BaseActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultcode, Intent intent)
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
-        super.onActivityResult(requestCode, resultcode, intent);
+        if (resultCode != RESULT_OK || requestCode != getIntentId()) {
+            return;
+        }
 
-        if (requestCode == INTENT_ID) {
-            if (intent != null) {
-                Log.d("IMAGE_PICKER", "idButSelPic Photopicker: " + intent.getDataString());
-                Cursor cursor = getContentResolver().query(intent.getData(), null, null, null, null);
-                cursor.moveToFirst();  //if not doing this, 01-22 19:17:04.564: ERROR/AndroidRuntime(26264): Caused by: android.database.CursorIndexOutOfBoundsException: Index -1 requested, with a size of 1
+        final boolean isCamera;
 
-                int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
-                String fileSrc = cursor.getString(idx);
-                Log.d("IMAGE_PICKER", "Picture:" + fileSrc);
-                //m_Tv.setText("Image selected:"+fileSrc);
+        if (data == null) {
+            isCamera = true;
+        } else {
+            final String action = data.getAction();
 
-                Bitmap bitmapPreview = BitmapFactory.decodeFile(fileSrc); //load preview image
-                //BitmapDrawable bmpDrawable = new BitmapDrawable(bitmapPreview);
-                //m_Image.setBackgroundDrawable(bmpDrawable);
-            }
-            else {
-                Log.d("IMAGE_PICKER", "idButSelPic Photopicker canceled");
-                //m_Tv.setText("Image selection canceled!");
+            if (action == null) {
+                isCamera = false;
+            } else {
+                isCamera = action.equals(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
             }
         }
+
+        Uri selectedImageUri;
+
+        if (isCamera) {
+            selectedImageUri = outputFileUri;
+        } else {
+            selectedImageUri = (data == null) ? null : data.getData();
+        }
+
+        Bitmap bmp = null;
+
+        try {
+            bmp = BitmapFactory.decodeStream(new java.net.URL(selectedImageUri.toString()).openStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ImageView imageView = new ImageView(this);
+        imageView.setAdjustViewBounds(true);
+        imageView.setLayoutParams(new AbsListView.LayoutParams(200, 200));
+        LinearLayout imageList = (LinearLayout) findViewById(R.id.images);
+        imageView.setImageBitmap(bmp);
+        imageList.addView(imageView, 1);
+
+        imagesToUpload.add(bmp);
     }
 
     public class CreateBikeTask extends AsyncTask<String, Void, Boolean> {
         @Override
         protected Boolean doInBackground(String... params) {
             String apiKey = readApiKey();
-            return AccountApiClient.addBike(apiKey, params[0], params[1]);
+            return AccountApiClient.addBike(apiKey, params[0], params[1], imagesToUpload);
         }
 
         @Override

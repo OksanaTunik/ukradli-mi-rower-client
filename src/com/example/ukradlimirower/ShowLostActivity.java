@@ -53,6 +53,12 @@ public class ShowLostActivity extends BaseActivity {
 
             lvMain.setAdapter(adapter);
 
+            TextView tvTitle = (TextView) findViewById(R.id.tvTitle);
+            TextView tvDescr = (TextView) findViewById(R.id.tvDescription);
+
+            tvTitle.setText(result.getTitle());
+            tvDescr.setText(result.getDescription());
+
             /*lvMain.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

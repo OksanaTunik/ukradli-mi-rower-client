@@ -1,15 +1,17 @@
 package com.example.ukradlimirower;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.graphics.Bitmap;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -82,18 +84,34 @@ public class AccountApiClient extends BaseApiClient {
         return result;
     }
 
-    public static boolean addBike(String apiKey, String title, String description) {
-        List<NameValuePair> data = new ArrayList<NameValuePair>();
-        data.add(new BasicNameValuePair("api_key", apiKey));
-        data.add(new BasicNameValuePair("title", title));
-        data.add(new BasicNameValuePair("description", description));
-
+    public static boolean addBike(String apiKey, String title, String description, List<Bitmap> images) {
         String url = getUrl("/bikes");
-
-        JSONObject res = HttpClientHelper.post(url, data);
         boolean result = false;
+        String boundary = "-------------" + System.currentTimeMillis();
 
         try {
+            MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+
+            for (Bitmap image : images) {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+                byte[] data = bos.toByteArray();
+                byte[] encoded_data = Base64.encodeBase64(data);
+
+                entityBuilder.addTextBody("images[]", new String(encoded_data));
+            }
+
+            entityBuilder.setBoundary(boundary);
+            entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+            entityBuilder.addTextBody("api_key", apiKey);
+            entityBuilder.addTextBody("title", title);
+            entityBuilder.addTextBody("description", description);
+
+            HttpEntity entity = entityBuilder.build();
+
+            JSONObject res = HttpClientHelper.post(url, entity, boundary);
+
             result = res.getBoolean("success");
         } catch (Exception e) {
             e.printStackTrace();

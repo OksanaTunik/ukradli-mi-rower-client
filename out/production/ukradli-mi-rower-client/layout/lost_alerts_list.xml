@@ -35,7 +35,7 @@
            android:layout_marginTop="20dp"
            android:background="@drawable/button_alert"
            android:text="ALERT"
-           android:textSize="20dp"
+           android:textSize="35dp"
        />
    </LinearLayout>
 </LinearLayout>

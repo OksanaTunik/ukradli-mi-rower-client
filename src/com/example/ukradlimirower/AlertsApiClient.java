@@ -1,6 +1,7 @@
 package com.example.ukradlimirower;
 
 import android.graphics.Bitmap;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -25,7 +26,7 @@ import java.util.List;
  * Created by shybovycha on 23.11.14.
  */
 public class AlertsApiClient extends BaseApiClient {
-    public static boolean createLostAlert(String apiKey, String title, String description, Double lat, Double lon, List<File> images) {
+    public static boolean createLostAlert(String apiKey, String title, String description, Double lat, Double lon, List<Bitmap> images) {
         String lat_s = lat.toString();
         String lon_s = lon.toString();
         String url = getUrl("/alerts/lost");
@@ -35,13 +36,13 @@ public class AlertsApiClient extends BaseApiClient {
         try {
             MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
 
-            for (File image : images) {
-                /*ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+            for (Bitmap image : images) {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.JPEG, 80, bos);
                 byte[] data = bos.toByteArray();
-                ByteArrayBody bab = new ByteArrayBody(data, "pic.jpeg");*/
+                byte[] encoded_data = Base64.encodeBase64(data);
 
-                entityBuilder.addPart("images[]", new FileBody(image, "image/jpeg"));
+                entityBuilder.addTextBody("images[]", new String(encoded_data));
             }
 
             entityBuilder.setBoundary(boundary);
@@ -65,24 +66,39 @@ public class AlertsApiClient extends BaseApiClient {
         return result;
     }
 
-    public static boolean createFoundAlert(String apiKey, String lostAlertId, String title, String description, Double lat, Double lon) {
+    public static boolean createFoundAlert(String apiKey, String lostAlertId, String title, String description, Double lat, Double lon, List<Bitmap> images) {
         String lat_s = lat.toString();
         String lon_s = lon.toString();
-
-        List<NameValuePair> data = new ArrayList<NameValuePair>();
-        data.add(new BasicNameValuePair("api_key", apiKey));
-        data.add(new BasicNameValuePair("lost_alert_id", lostAlertId));
-        data.add(new BasicNameValuePair("title", title));
-        data.add(new BasicNameValuePair("description", description));
-        data.add(new BasicNameValuePair("lat", lat_s));
-        data.add(new BasicNameValuePair("lon", lon_s));
-
         String url = getUrl("/alerts/found");
-
-        JSONObject res = HttpClientHelper.post(url, data);
         boolean result = false;
+        String boundary = "-------------" + System.currentTimeMillis();
 
         try {
+            MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+
+            for (Bitmap image : images) {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                image.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+                byte[] data = bos.toByteArray();
+                byte[] encoded_data = Base64.encodeBase64(data);
+
+                entityBuilder.addTextBody("images[]", new String(encoded_data));
+            }
+
+            entityBuilder.setBoundary(boundary);
+            entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+            entityBuilder.addTextBody("api_key", apiKey);
+            entityBuilder.addTextBody("lost_alert_id", lostAlertId);
+            entityBuilder.addTextBody("title", title);
+            entityBuilder.addTextBody("description", description);
+            entityBuilder.addTextBody("lat", lat_s);
+            entityBuilder.addTextBody("lon", lon_s);
+
+            HttpEntity entity = entityBuilder.build();
+
+            JSONObject res = HttpClientHelper.post(url, entity, boundary);
+
             result = res.getBoolean("success");
         } catch (Exception e) {
             e.printStackTrace();
