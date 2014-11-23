@@ -131,7 +131,10 @@ public class AlertsApiClient extends BaseApiClient {
                 JSONArray images = alert.getJSONArray("images");
 
                 for (int t = 0; t < images.length(); t++) {
-                    resultListItem.images.add((String) images.get(t));
+                    String imageUrl = (String) images.get(t);
+                    resultListItem.images.add(imageUrl); // images.get(t));
+                    Bitmap bmp = BaseActivity.getBitmapFromUrl(imageUrl);
+                    resultListItem.bitmaps.add(bmp);
                 }
 
                 result.add(resultListItem);
@@ -165,7 +168,9 @@ public class AlertsApiClient extends BaseApiClient {
                 JSONArray images = alert.getJSONArray("images");
 
                 for (int i = 0; i < images.length(); i++) {
-                    result.images.add((String) images.get(i));
+                    String imageUrl = (String) images.get(i);
+                    result.images.add(imageUrl); // images.get(t));
+                    result.bitmaps.add(BaseActivity.getBitmapFromUrl(imageUrl));
                 }
             }
 
@@ -186,7 +191,9 @@ public class AlertsApiClient extends BaseApiClient {
                 JSONArray images = childAlert.getJSONArray("images");
 
                 for (int t = 0; t < images.length(); t++) {
-                    foundAlert.images.add((String) images.get(t));
+                    String imageUrl = (String) images.get(t);
+                    foundAlert.images.add(imageUrl); // images.get(t));
+                    foundAlert.bitmaps.add(BaseActivity.getBitmapFromUrl(imageUrl));
                 }
 
                 result.foundAlerts.add(foundAlert);

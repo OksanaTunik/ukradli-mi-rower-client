@@ -153,7 +153,7 @@ public abstract class BaseActivity extends Activity {
         return bestLocation;
     }
 
-    public Bitmap getBitmapFromUrl(String url) {
+    public static Bitmap getBitmapFromUrl(String url) {
         Bitmap res = null;
 
         try {

@@ -1,5 +1,7 @@
 package com.example.ukradlimirower;
 
+import android.graphics.Bitmap;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,7 @@ public class BaseAlert {
     protected double lon;
     protected int id;
     public List<String> images;
+    public List<Bitmap> bitmaps;
 
     public BaseAlert(int id, String title, String description, String author, double lat, double lon) {
         this.id = id;
@@ -23,6 +26,7 @@ public class BaseAlert {
         this.lat = lat;
         this.lon = lon;
         this.images = new ArrayList<String>();
+        this.bitmaps = new ArrayList<Bitmap>();
     }
 
     public int getId() {

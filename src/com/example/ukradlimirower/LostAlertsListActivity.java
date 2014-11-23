@@ -91,7 +91,7 @@ public class LostAlertsListActivity extends BaseActivity {
             description.setText(alert.getDescription());
 
             if (alert.images.size() > 0)
-                image.setImageBitmap(getBitmapFromUrl(alert.images.get(0)));
+                image.setImageBitmap(alert.bitmaps.get(0));
 
             listItem.setTag(String.format("%d", alert.getId()));
 

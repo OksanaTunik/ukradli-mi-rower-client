@@ -59,7 +59,7 @@ public class ShowLostActivity extends BaseActivity {
 
             for (int i = 0; i < result.images.size(); i++) {
                 ImageView image = new ImageView(ShowLostActivity.this);
-                image.setImageBitmap(getBitmapFromUrl(result.images.get(i)));
+                image.setImageBitmap(result.bitmaps.get(i));
                 image.setAdjustViewBounds(true);
                 image.setLayoutParams(new AbsListView.LayoutParams(200, 200));
 
@@ -116,9 +116,13 @@ public class ShowLostActivity extends BaseActivity {
 
             TextView title = (TextView) listItem.findViewById(R.id.title);
             TextView description = (TextView) listItem.findViewById(R.id.description);
+            ImageView image = (ImageView) listItem.findViewById(R.id.image);
 
             title.setText(alert.getTitle());
             description.setText(alert.getDescription());
+
+            if (alert.bitmaps.size() > 0)
+                image.setImageBitmap(alert.bitmaps.get(0));
 
             listItem.setTag(String.format("%d", alert.getId()));
 
