@@ -80,7 +80,7 @@ public class AlertsApiClient extends BaseApiClient {
                         alert.getInt("id"),
                         alert.getString("title"),
                         alert.getString("description"),
-                        alert.getString("author"),
+                        alert.getJSONObject("author").getString("name"),
                         alert.getDouble("lat"),
                         alert.getDouble("lon")
                 );
@@ -107,7 +107,7 @@ public class AlertsApiClient extends BaseApiClient {
                     alert.getInt("id"),
                     alert.getString("title"),
                     alert.getString("description"),
-                    alert.getString("author"),
+                    alert.getJSONObject("author").getString("name"),
                     alert.getDouble("lat"),
                     alert.getDouble("lon")
             );
@@ -120,7 +120,7 @@ public class AlertsApiClient extends BaseApiClient {
                         childAlert.getInt("id"),
                         childAlert.getString("title"),
                         childAlert.getString("description"),
-                        childAlert.getString("author"),
+                        childAlert.getJSONObject("author").getString("name"),
                         childAlert.getDouble("lat"),
                         childAlert.getDouble("lon")
                 ));
