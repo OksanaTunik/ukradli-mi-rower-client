@@ -63,6 +63,8 @@
                 android:layout_height="wrap_content"
                 android:text="Done"
                 android:textSize="35dp"
+                android:padding="10dp"
+                android:textColor="#fff"
                 android:background="#f30000"
                 />
     </LinearLayout>
